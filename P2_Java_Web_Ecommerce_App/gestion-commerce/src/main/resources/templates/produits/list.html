@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Liste des Produits</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="content-wrapper">
+        <nav class="main-nav">
+            <ul>
+                <li><a th:href="@{/}">Accueil</a></li>
+                <li><a th:href="@{/produits}" class="active">Produits</a></li>
+                <li><a th:href="@{/categories}">Catégories</a></li>
+                <li><a th:href="@{/marques}">Marques</a></li>
+            </ul>
+        </nav>
+
+        <div class="container">
+            <header class="page-header">
+                <h2>Liste des Produits</h2>
+                <div class="actions-bar">
+                    <a th:href="@{/produits/new}" class="btn btn-primary">
+                        <i class="icon">+</i> Nouveau Produit
+                    </a>
+                </div>
+            </header>
+
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nom</th>
+                                <th>Prix</th>
+                                <th>Marque</th>
+                                <th>Catégorie</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:if="${produitsPage == null || #lists.isEmpty(produitsPage.content)}">
+                                <td colspan="6" class="text-center">Aucun produit trouvé</td>
+                            </tr>
+                            <tr th:each="p : ${produitsPage?.content}"
+                                th:unless="${produitsPage == null || #lists.isEmpty(produitsPage.content)}">
+                                <td th:text="${p.id}">ID</td>
+                                <td th:text="${p.nom}">Nom</td>
+                                <td th:text="${#numbers.formatDecimal(p.prix, 1, 2) + ' €'}">Prix</td>
+                                <td th:text="${p.marque?.nom}">Marque</td>
+                                <td th:text="${p.categorie?.nom}">Catégorie</td>
+                                <td class="actions">
+                                    <a th:href="@{/produits/edit/{id}(id=${p.id})}"
+                                        class="btn btn-sm btn-secondary">Modifier</a>
+                                    <a th:href="@{/produits/delete/{id}(id=${p.id})}" class="btn btn-sm btn-danger">
+                                        Supprimer
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <form th:if="${produitsPage != null && !#lists.isEmpty(produitsPage.content)}" th:action="@{/produits}"
+                    method="get" class="page-size-form">
+                    <label for="size">Afficher :</label>
+                    <select name="size" id="size" onchange="this.form.submit()">
+                        <option value="5" th:selected="${produitsPage.size == 5}">5</option>
+                        <option value="10" th:selected="${produitsPage.size == 10}">10</option>
+                        <option value="20" th:selected="${produitsPage.size == 20}">20</option>
+                    </select>
+                    par page
+                    <input type="hidden" name="page" value="0" />
+                </form>
+                <div th:if="${produitsPage != null && !#lists.isEmpty(produitsPage.content)}" class="pagination">
+                    <a th:if="${produitsPage.number > 0}"
+                        th:href="@{/produits(page=${produitsPage.number - 1},size=${produitsPage.size})}"
+                        class="pagination-link">&laquo; Précédent</a>
+
+                    <span class="pagination-info"
+                        th:text="'Page ' + ${produitsPage.number + 1} + ' sur ' + ${produitsPage.totalPages}"></span>
+
+                    <a th:if="${produitsPage.number + 1 < produitsPage.totalPages}"
+                        th:href="@{/produits(page=${produitsPage.number + 1},size=${produitsPage.size})}"
+                        class="pagination-link">Suivant &raquo;</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 MST-RSI</p>
+        <p>MOUADILI Abdelmounim</p>
+    </footer>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-backdrop" id="deleteModal">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <h3 class="modal-title">Confirmation de suppression</h3>
+            </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir supprimer ce produit ?</p>
+                <p class="text-muted">Cette action ne peut pas être annulée.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeDeleteModal()">Annuler</button>
+                <button class="btn btn-danger" onclick="confirmDelete()">Supprimer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Snackbar for notifications -->
+    <div class="snackbar" id="snackbar"></div>
+
+    <script th:inline="javascript">
+        let deleteUrl = '';
+
+        // Show delete confirmation modal
+        function showDeleteModal(url) {
+            deleteUrl = url;
+            document.getElementById('deleteModal').classList.add('show');
+        }
+
+        // Close delete confirmation modal
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('show');
+            deleteUrl = '';
+        }
+
+        // Confirm deletion
+        function confirmDelete() {
+            if (deleteUrl) {
+                window.location.href = deleteUrl;
+            }
+            closeDeleteModal();
+        }
+
+        // Show snackbar message
+        function showSnackbar(message, type = 'success') {
+            const snackbar = document.getElementById('snackbar');
+            snackbar.textContent = message;
+            snackbar.className = 'snackbar ' + type + ' show';
+
+            setTimeout(() => {
+                snackbar.classList.remove('show');
+            }, 3000);
+        }
+
+        // Check for message parameter in URL
+        document.addEventListener('DOMContentLoaded', function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            const message = urlParams.get('message');
+            const type = urlParams.get('type') || 'success';
+
+            if (message) {
+                showSnackbar(decodeURIComponent(message), type);
+                // Remove message from URL but keep pagination parameters
+                const params = new URLSearchParams(window.location.search);
+                params.delete('message');
+                params.delete('type');
+                const newUrl = window.location.pathname + (params.toString() ? '?' + params.toString() : '');
+                window.history.replaceState({}, document.title, newUrl);
+            }
+
+            // Update delete links to use modal
+            document.querySelectorAll('a[href^="/produits/delete/"]').forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    showDeleteModal(this.href);
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Gestion Commerce - Accueil</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="content-wrapper">
+        <nav class="main-nav">
+            <ul>
+                <li><a th:href="@{/}" class="active">Accueil</a></li>
+                <li><a th:href="@{/produits}">Produits</a></li>
+                <li><a th:href="@{/categories}">Catégories</a></li>
+                <li><a th:href="@{/marques}">Marques</a></li>
+            </ul>
+        </nav>
+
+        <main class="home-content">
+            <header class="hero-section">
+                <h1>Bienvenue sur Gestion Commerce</h1>
+                <p>Système de gestion d'inventaire et de commerce électronique</p>
+            </header>
+
+            <section class="features-grid">
+                <div class="feature-card">
+                    <h2>Gestion des Produits</h2>
+                    <p>Gérez votre catalogue de produits, leurs prix et leurs stocks.</p>
+                    <a th:href="@{/produits}" class="button">Voir les Produits</a>
+                </div>
+
+                <div class="feature-card">
+                    <h2>Catégories</h2>
+                    <p>Organisez vos produits par catégories pour une meilleure navigation.</p>
+                    <a th:href="@{/categories}" class="button">Gérer les Catégories</a>
+                </div>
+
+                <div class="feature-card">
+                    <h2>Marques</h2>
+                    <p>Suivez et gérez les différentes marques de vos produits.</p>
+                    <a th:href="@{/marques}" class="button">Gérer les Marques</a>
+                </div>
+            </section>
+        </main>
+
+    </div>
+    <footer class="footer">
+        <p>&copy; 2025 MST-RSI</p>
+        <p>MOUADILI Abdelmounim</p>
+    </footer>
+</body>
+
+</html>
