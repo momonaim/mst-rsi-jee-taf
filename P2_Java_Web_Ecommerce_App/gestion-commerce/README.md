@@ -101,9 +101,13 @@ src/
 ## 📱 Captures d'écran
 
 - Page d'accueil : Interface principale avec accès rapide aux fonctionnalités
+![localhost_8080_](https://github.com/user-attachments/assets/1451997f-5441-4a6a-9aa2-caba5eddf8a9)
+
 - Liste des produits : Vue d'ensemble des produits avec options de gestion
+![localhost_8080_produits](https://github.com/user-attachments/assets/c66c9fae-dbb4-41c2-a18c-87279aee549b)
+
 - Formulaires : Interfaces intuitives pour l'ajout et la modification
-- Responsive : S'adapte à tous les appareils (desktop, tablette, mobile)
+![localhost_8080_produits_new](https://github.com/user-attachments/assets/12f8ed72-a11e-472f-8e16-8a75dfba7c6e)
 
 ## 🔧 Configuration
 
