@@ -56,7 +56,7 @@ Développer une application de gestion de commerce avec les entités : **Produit
 * Thymeleaf (templates HTML)
 * Spring MVC
 * Spring Data JPA
-* H2 / MySQL
+* H2 Database
 
 ### 🧱 Modèle de données
 
